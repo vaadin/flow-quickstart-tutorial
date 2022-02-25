@@ -4,7 +4,7 @@ This repository contains the source code for the [Vaadin Flow Quick Start Guide]
 
 ## Branches
 
-- The main branch contains the source code for the latest Vaadin release
+- The main branch contains the source code for the latest Vaadin release.
 - The `v14` branch contains the source code for Vaadin 14 LTS.
 
 ## Running the Application Locally
