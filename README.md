@@ -1,17 +1,26 @@
-# My Todo
+# Vaadin Flow Quick Start Application
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+This repository contains the source code for the [Vaadin Flow Quick Start Guide](https://vaadin.com/docs/latest/flow/guide/quick-start).
 
-## Running the application
+## Branches
+
+- The main branch contains the source code for the latest Vaadin release
+- The `v14` branch contains the source code for Vaadin 14 LTS.
+
+## Running the Application Locally
 
 The project is a standard Maven project. To run it from the command line,
 type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
 http://localhost:8080 in your browser.
 
 You can also import the project to your IDE of choice as you would with any
-Maven project. Read more on [how to import Vaadin projects to different 
+Maven project. Read more on [how to import Vaadin projects to different
 IDEs](https://vaadin.com/docs/latest/flow/guide/step-by-step/importing) (Eclipse, IntelliJ IDEA, NetBeans, and VS Code).
+
+## Open in Online IDE
+
+[![Open in online IDE ](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/vaadin/flow-quickstart-tutorial)
+
 
 ## Deploying to Production
 
@@ -25,11 +34,7 @@ Once the JAR file is built, you can run it using
 
 ## Project structure
 
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/components/vaadin-app-layout).
 - `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
 ## Useful links
