@@ -7,6 +7,8 @@ This repository contains the source code for the [Vaadin Flow Quick Start Guide]
 - The main branch contains the source code for the latest Vaadin release
 - The `v14` branch contains the source code for Vaadin 14 LTS.
 
+Note that **Vaadin 14 is in the extended maintenance phase** which means that you need to get a license to use the latest versions. As an alternative, you can use the newest Vaadin version or and older version of Vaadin 14. Vaadin 14.11 is the last free version in the 14.x series but it's no longer maintained.
+
 ## Running the Application Locally
 
 The project is a standard Maven project. To run it from the command line,
