@@ -52,3 +52,67 @@ jobs:
           path: |
             **/failsafe-reports/
             error-screenshots/
+
+  # Starts the app the way a developer does (spring-boot:run in development mode)
+  # and checks that it serves the root page. The production build above does not
+  # run the dev-mode class scan, so failures that only happen there, such as
+  # https://github.com/vaadin/copilot-internal/pull/10009, are not caught by it.
+  dev-mode:
+    name: Dev mode startup
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+      - uses: stCarolas/setup-maven@v5.1
+        with:
+          maven-version: ${{ env.MAVEN_VERSION }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Start app in dev mode
+        run: |
+          mvn -B -ntp spring-boot:run \
+            -Dspring-boot.run.arguments="--server.port=8080 --vaadin.launch-browser=false" \
+            > dev-mode.log 2>&1 &
+          echo $! > dev-mode.pid
+      - name: Wait for app to start
+        run: |
+          for i in $(seq 1 120); do
+            if grep -qE "Application run failed|BUILD FAILURE" dev-mode.log; then
+              echo "::error::App failed to start in dev mode"
+              exit 1
+            fi
+            if ! kill -0 "$(cat dev-mode.pid)" 2>/dev/null; then
+              echo "::error::Maven exited before the app started"
+              exit 1
+            fi
+            if grep -qE "Started Application" dev-mode.log; then
+              break
+            fi
+            sleep 5
+          done
+          grep -qE "Started Application" dev-mode.log || { echo "::error::App did not start within 10 minutes"; exit 1; }
+      - name: Check root page
+        run: |
+          for i in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/ || true)
+            [ "$code" = "200" ] && echo "Root page returned 200" && exit 0
+            sleep 5
+          done
+          echo "::error::Root page did not return 200, last status: $code"
+          exit 1
+      - name: Show dev mode log
+        if: ${{ always() }}
+        run: cat dev-mode.log || true
+      - name: Stop app
+        if: ${{ always() }}
+        run: |
+          kill "$(cat dev-mode.pid)" 2>/dev/null || true
+          pkill -f 'com.example.application.Application' || true
